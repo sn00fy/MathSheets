@@ -1,6 +1,6 @@
 ﻿namespace MathSheets;
 
-internal class AdditionSubtraction
+internal static class AdditionSubtraction
 {
     private static readonly Random Rng = new();
 
@@ -20,37 +20,37 @@ internal class AdditionSubtraction
         };
     }
 
-    public static string FindSum(int max)
+    private static string FindSum(int max)
     {
         var data = new Data(max);
         return $"{data.Summand1} + {data.Summand2} = ____";
     }
 
-    public static string FindFirstSummand(int max)
+    private static string FindFirstSummand(int max)
     {
         var data = new Data(max);
         return $"____ + {data.Summand2} = {data.Sum}";
     }
 
-    public static string FindSecondSummand(int max)
+    private static string FindSecondSummand(int max)
     {
         var data = new Data(max);
         return $"{data.Summand1} + ____ = {data.Sum}";
     }
 
-    public static string FindDifference(int max)
+    private static string FindDifference(int max)
     {
         var data = new Data(max);
         return $"{data.Sum} - {data.Summand1} = ____";
     }
 
-    public static string FindMinuend(int max)
+    private static string FindMinuend(int max)
     {
         var data = new Data(max);
         return $"____ - {data.Summand1} = {data.Summand2}";
     }
 
-    public static string FindSubtrahend(int max)
+    private static string FindSubtrahend(int max)
     {
         var data = new Data(max);
         return $"{data.Sum} - ____ = {data.Summand2}";
@@ -61,7 +61,7 @@ internal class AdditionSubtraction
         public string Summand1 { get; private set; }
         public string Summand2 { get; private set; }
         public string Sum { get; private set; }
-        public int Digits { get; private set; }
+        private int Digits { get; set; }
 
         public Data(int max)
         {

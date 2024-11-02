@@ -17,7 +17,7 @@ for (int page = 0; page < 10; page++)
 
         for (int i = 0; i < 10; i++)
         {
-            result.AppendLine(MultiplicationDivision.RandomMultiplicationOrDivision(11));
+            result.AppendLine(MultiplicationDivision.RandomMultiplicationOrDivision(12));
         }
 
         result.AppendLine();
