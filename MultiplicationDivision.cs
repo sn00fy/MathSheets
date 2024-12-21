@@ -1,4 +1,6 @@
-﻿namespace MathSheets;
+﻿using System.Text;
+
+namespace MathSheets;
 
 internal static class MultiplicationDivision
 {
@@ -6,19 +8,26 @@ internal static class MultiplicationDivision
 
     public static string RandomMultiplicationOrDivision(int max)
     {
-        int type = Rng.Next(7);
-
-        return type switch
+        var result = new StringBuilder();
+        
+        for (var i = 0; i < 10; i++)
         {
-            0 => FindProduct(max),
-            1 => FindFirstFactor(max),
-            2 => FindSecondFactor(max),
-            3 => FindQuotient(max),
-            4 => FindQuotientAndRemains(max),
-            5 => FindDividend(max),
-            6 => FindDivisor(max),
-            _ => throw new NotSupportedException(),
-        };
+            var type = Rng.Next(7);
+
+            result.AppendLine(type switch
+            {
+                0 => FindProduct(max),
+                1 => FindFirstFactor(max),
+                2 => FindSecondFactor(max),
+                3 => FindQuotient(max),
+                4 => FindQuotientAndRemains(max),
+                5 => FindDividend(max),
+                6 => FindDivisor(max),
+                _ => throw new NotSupportedException()
+            });
+        }
+
+        return result.ToString();
     }
 
     private static string FindProduct(int max)
@@ -77,11 +86,26 @@ internal static class MultiplicationDivision
             int product = factor1 * factor2;
             int remains = Rng.Next(factor2 - 1) + 1;
             int productWithRemains = product + remains;
+            
+            Factor1 = Rng.Next(4) == 0
+                ? $"({string.Join(" + ", TwoSummands(factor1))})"
+                : factor1.ToString();
+            
+            Factor2 = Rng.Next(4) == 0
+                ? $"({string.Join(" + ", TwoSummands(factor2))})"
+                : factor2.ToString();
+            
+            Product = product.ToString();
+            ProductWithRemains = productWithRemains.ToString();
+        }
+        
+        private static IEnumerable<int> TwoSummands(int number)
+        {
+            // Generate a random number between 1 and number - 1
+            int part1 = Rng.Next(1, number);
+            int part2 = number - part1;
 
-            Factor1 = factor1.Pad(2);
-            Factor2 = factor2.Pad(2);
-            Product = product.Pad(2);
-            ProductWithRemains = productWithRemains.Pad(2);
+            return [part1, part2];
         }
     }
 }

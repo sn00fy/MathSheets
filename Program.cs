@@ -8,27 +8,11 @@ for (int page = 0; page < 10; page++)
 {
     for (int reps = 0; reps < 4; reps++)
     {
-        for (int i = 0; i < 10; i++)
-        {
-            result.AppendLine(AdditionSubtraction.RandomAdditionOrSubtraction(100));
-        }
-
-        result.AppendLine();
-
-        for (int i = 0; i < 10; i++)
-        {
-            result.AppendLine(MultiplicationDivision.RandomMultiplicationOrDivision(12));
-        }
-
-        result.AppendLine();
+        result.AppendLine(AdditionSubtraction.RandomAdditionOrSubtraction(120));
+        result.AppendLine(MultiplicationDivision.RandomMultiplicationOrDivision(13));
     }
+    result.AppendLine(Equations.RandomEquations(12, 2));
 
-    for (int i = 0; i < 10; i++)
-    {
-        result.AppendLine(AdditionSubtraction.RandomAdditionOrSubtraction(100));
-    }
-
-    result.AppendLine();
 }
 
 File.WriteAllText("tasks.txt", result.ToString());

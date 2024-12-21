@@ -1,4 +1,6 @@
-﻿namespace MathSheets;
+﻿using System.Text;
+
+namespace MathSheets;
 
 internal static class AdditionSubtraction
 {
@@ -6,18 +8,25 @@ internal static class AdditionSubtraction
 
     public static string RandomAdditionOrSubtraction(int max)
     {
-        int type = Rng.Next(6);
-
-        return type switch
+        var result = new StringBuilder();
+        
+        for (var i = 0; i < 10; i++)
         {
-            0 => FindSum(max),
-            1 => FindFirstSummand(max),
-            2 => FindSecondSummand(max),
-            3 => FindDifference(max),
-            4 => FindMinuend(max),
-            5 => FindSubtrahend(max),
-            _ => throw new NotSupportedException(),
-        };
+            var type = Rng.Next(6);
+
+            result.AppendLine(type switch
+            {
+                0 => FindSum(max),
+                1 => FindFirstSummand(max),
+                2 => FindSecondSummand(max),
+                3 => FindDifference(max),
+                4 => FindMinuend(max),
+                5 => FindSubtrahend(max),
+                _ => throw new NotSupportedException()
+            });
+        }
+
+        return result.ToString();
     }
 
     private static string FindSum(int max)
@@ -61,18 +70,80 @@ internal static class AdditionSubtraction
         public string Summand1 { get; private set; }
         public string Summand2 { get; private set; }
         public string Sum { get; private set; }
-        private int Digits { get; set; }
 
         public Data(int max)
         {
             int summand1 = Rng.Next((int)(0.9 * max)) + (int)(0.05 * max);
             int summand2 = Rng.Next((int)(0.95 * max) - summand1) + (int)(0.03 * max);
             int sum = summand1 + summand2;
-            Digits = (max - 1).GetDigits();
 
-            Summand1 = summand1.Pad(Digits);
-            Summand2 = summand2.Pad(Digits);
-            Sum = sum.Pad(Digits);
+            var (a, b) = TwoFactors(summand1);
+            
+            Summand1 = a != 1 && b != 1 && Rng.Next(2) == 0
+                ? $"{a} \u22c5 {b}"
+                : summand1.ToString();
+
+            var (x, y) = TwoFactors(summand2);
+            
+            Summand2 = x != 1 && y != 1 && Rng.Next(2) == 0
+                ? $"{x} \u22c5 {y}"
+                : summand2.ToString();
+
+            Sum = sum.ToString();
+        }
+        
+        private static (int, int) TwoFactors(int number)
+        {
+            var primeFactors = GetPrimeFactors(number);
+            
+            int factor1 = 1;
+            int factor2 = 1;
+
+            // Shuffle and split prime factors into two groups
+            foreach (int primeFactor in primeFactors)
+            {
+                if (Rng.Next(2) == 0)
+                {
+                    factor1 *= primeFactor;
+                }
+                else
+                {
+                    factor2 *= primeFactor;
+                }
+            }
+
+            return (factor1, factor2);
+        }
+        
+        private static List<int> GetPrimeFactors(int number)
+        {
+            var primeFactors = new List<int>();
+        
+            // Divide the number by 2 as long as it's even
+            while (number % 2 == 0)
+            {
+                primeFactors.Add(2);
+                number /= 2;
+            }
+        
+            // Now the number must be odd, start checking from 3
+            for (int i = 3; i <= Math.Sqrt(number); i += 2)
+            {
+                // While i divides number, add i and divide the number
+                while (number % i == 0)
+                {
+                    primeFactors.Add(i);
+                    number /= i;
+                }
+            }
+        
+            // If number is still greater than 2, then it's a prime factor
+            if (number > 2)
+            {
+                primeFactors.Add(number);
+            }
+        
+            return primeFactors;
         }
     }
 }
